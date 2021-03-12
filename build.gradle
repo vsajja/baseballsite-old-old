@@ -12,9 +12,6 @@ buildscript {
 apply plugin: 'io.ratpack.ratpack-groovy'
 apply plugin: 'idea'
 
-import groovy.xml.MarkupBuilder
-import org.jooq.codegen.*
-
 version = '0.0.1-dev'
 
 run {
