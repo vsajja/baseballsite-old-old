@@ -47,8 +47,9 @@ dependencies {
 }
 
 task stage {
-    dependsOn installDist
+    dependsOn 'build', 'clean', 'installDist'
 }
+build.mustRunAfter clean
 
 task jooqCodegen {
     doFirst {
