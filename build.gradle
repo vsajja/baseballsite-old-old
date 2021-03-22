@@ -106,7 +106,7 @@ task jooqCodegen {
 
 task release {
     group = 'release'
-    def releaseUi = true
+    def releaseUi = false
 
     doLast {
         if (releaseUi) {
