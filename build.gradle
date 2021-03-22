@@ -105,7 +105,7 @@ task jooqCodegen {
 
 task release {
     group = 'release'
-    def releaseUi = true
+    def releaseUi = false
 
     doLast {
         if (releaseUi) {
@@ -124,7 +124,7 @@ task release {
         }
         exec {
             commandLine 'cmd', '/c',
-                    "git config core.autocrlf true && " +
+                    "git config core.autocrlf false && " +
                             "git add --all && " +
                             "git commit -m \"release-${project.version}-${new Date().getTime()}\""
         }
