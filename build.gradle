@@ -50,7 +50,6 @@ task stage {
     dependsOn 'installDist'
 }
 
-
 task jooqCodegen {
     doFirst {
         delete 'src/main/java/jooq.generated'
