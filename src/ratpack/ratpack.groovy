@@ -49,6 +49,11 @@ ratpack {
             next()
         }
 
+        get('daily') {
+            println 'test'
+            render 'test'
+        }
+
         files {
             dir 'dist'
             indexFiles 'index.html'
