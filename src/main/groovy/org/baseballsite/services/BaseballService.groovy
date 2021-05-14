@@ -36,25 +36,13 @@ class BaseballService {
         MlbTeam team = mlbTeamDao.fetchOne(MLB_TEAM.TEAM_ID, mlbTeam.getTeamId())
 
         // insert
-        if(team == null) {
+        if (team == null) {
             println "Inserting: ${mlbTeam.toString()}"
             mlbTeamDao.insert(mlbTeam)
-        }
-        else {
-            mlbTeam.setId(team.getId())
-
+        } else {
+            // update
             println "Updating: ${mlbTeam.toString()}"
-//            team.setName(mlbTeam.getName())
-//            team.setCode(mlbTeam.getCode())
-//            team.setDivision(mlbTeam.getDivision())
-//            team.setLeague(mlbTeam.getLeague())
-//            team.setLevel(mlbTeam.getLevel())
-//            team.setFirstYearOfPlay(mlbTeam.getFirstYearOfPlay())
-//            team.setDivisionId(mlbTeam.getDivisionId())
-//            team.setLeagueId(mlbTeam.getLeagueId())
-//            team.setSportId(mlbTeam.getSportId())
-//            team.setTeamId(mlbTeam.getTeamId())
-
+            mlbTeam.setId(team.getId())
             mlbTeamDao.update(mlbTeam)
         }
     }
