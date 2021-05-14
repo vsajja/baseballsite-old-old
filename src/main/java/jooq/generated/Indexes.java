@@ -30,13 +30,13 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
-    public static final Index MLB_TEAM_PKEY = Indexes0.MLB_TEAM_PKEY;
+    public static final Index MLB_TEAM_PK = Indexes0.MLB_TEAM_PK;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
     // -------------------------------------------------------------------------
 
     private static class Indexes0 {
-        public static Index MLB_TEAM_PKEY = Internal.createIndex("mlb_team_pkey", MlbTeam.MLB_TEAM, new OrderField[] { MlbTeam.MLB_TEAM.ID }, true);
+        public static Index MLB_TEAM_PK = Internal.createIndex("mlb_team_pk", MlbTeam.MLB_TEAM, new OrderField[] { MlbTeam.MLB_TEAM.ID }, true);
     }
 }

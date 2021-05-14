@@ -22,7 +22,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MlbTeam implements Serializable {
 
-    private static final long serialVersionUID = 1061431353;
+    private static final long serialVersionUID = -446055909;
 
     private Integer id;
     private String  name;
@@ -33,6 +33,7 @@ public class MlbTeam implements Serializable {
     private Integer firstYearOfPlay;
     private Integer divisionId;
     private Integer leagueId;
+    private Integer sportId;
     private Integer teamId;
 
     public MlbTeam() {}
@@ -47,6 +48,7 @@ public class MlbTeam implements Serializable {
         this.firstYearOfPlay = value.firstYearOfPlay;
         this.divisionId = value.divisionId;
         this.leagueId = value.leagueId;
+        this.sportId = value.sportId;
         this.teamId = value.teamId;
     }
 
@@ -60,6 +62,7 @@ public class MlbTeam implements Serializable {
         Integer firstYearOfPlay,
         Integer divisionId,
         Integer leagueId,
+        Integer sportId,
         Integer teamId
     ) {
         this.id = id;
@@ -71,6 +74,7 @@ public class MlbTeam implements Serializable {
         this.firstYearOfPlay = firstYearOfPlay;
         this.divisionId = divisionId;
         this.leagueId = leagueId;
+        this.sportId = sportId;
         this.teamId = teamId;
     }
 
@@ -155,6 +159,15 @@ public class MlbTeam implements Serializable {
         return this;
     }
 
+    public Integer getSportId() {
+        return this.sportId;
+    }
+
+    public MlbTeam setSportId(Integer sportId) {
+        this.sportId = sportId;
+        return this;
+    }
+
     public Integer getTeamId() {
         return this.teamId;
     }
@@ -227,6 +240,12 @@ public class MlbTeam implements Serializable {
         }
         else if (!leagueId.equals(other.leagueId))
             return false;
+        if (sportId == null) {
+            if (other.sportId != null)
+                return false;
+        }
+        else if (!sportId.equals(other.sportId))
+            return false;
         if (teamId == null) {
             if (other.teamId != null)
                 return false;
@@ -249,6 +268,7 @@ public class MlbTeam implements Serializable {
         result = prime * result + ((this.firstYearOfPlay == null) ? 0 : this.firstYearOfPlay.hashCode());
         result = prime * result + ((this.divisionId == null) ? 0 : this.divisionId.hashCode());
         result = prime * result + ((this.leagueId == null) ? 0 : this.leagueId.hashCode());
+        result = prime * result + ((this.sportId == null) ? 0 : this.sportId.hashCode());
         result = prime * result + ((this.teamId == null) ? 0 : this.teamId.hashCode());
         return result;
     }
@@ -266,6 +286,7 @@ public class MlbTeam implements Serializable {
         sb.append(", ").append(firstYearOfPlay);
         sb.append(", ").append(divisionId);
         sb.append(", ").append(leagueId);
+        sb.append(", ").append(sportId);
         sb.append(", ").append(teamId);
 
         sb.append(")");

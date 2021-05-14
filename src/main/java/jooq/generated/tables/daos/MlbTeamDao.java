@@ -181,6 +181,20 @@ public class MlbTeamDao extends DAOImpl<MlbTeamRecord, jooq.generated.tables.poj
     }
 
     /**
+     * Fetch records that have <code>sport_id BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<jooq.generated.tables.pojos.MlbTeam> fetchRangeOfSportId(Integer lowerInclusive, Integer upperInclusive) {
+        return fetchRange(MlbTeam.MLB_TEAM.SPORT_ID, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>sport_id IN (values)</code>
+     */
+    public List<jooq.generated.tables.pojos.MlbTeam> fetchBySportId(Integer... values) {
+        return fetch(MlbTeam.MLB_TEAM.SPORT_ID, values);
+    }
+
+    /**
      * Fetch records that have <code>team_id BETWEEN lowerInclusive AND upperInclusive</code>
      */
     public List<jooq.generated.tables.pojos.MlbTeam> fetchRangeOfTeamId(Integer lowerInclusive, Integer upperInclusive) {

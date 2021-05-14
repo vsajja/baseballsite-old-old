@@ -9,6 +9,7 @@ import javax.annotation.Generated;
 import jooq.generated.tables.MlbTeam;
 import jooq.generated.tables.records.MlbTeamRecord;
 
+import org.jooq.Identity;
 import org.jooq.UniqueKey;
 import org.jooq.impl.Internal;
 
@@ -31,12 +32,13 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
+    public static final Identity<MlbTeamRecord, Integer> IDENTITY_MLB_TEAM = Identities0.IDENTITY_MLB_TEAM;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<MlbTeamRecord> MLB_TEAM_PKEY = UniqueKeys0.MLB_TEAM_PKEY;
+    public static final UniqueKey<MlbTeamRecord> MLB_TEAM_PK = UniqueKeys0.MLB_TEAM_PK;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -47,7 +49,11 @@ public class Keys {
     // [#1459] distribute members to avoid static initialisers > 64kb
     // -------------------------------------------------------------------------
 
+    private static class Identities0 {
+        public static Identity<MlbTeamRecord, Integer> IDENTITY_MLB_TEAM = Internal.createIdentity(MlbTeam.MLB_TEAM, MlbTeam.MLB_TEAM.ID);
+    }
+
     private static class UniqueKeys0 {
-        public static final UniqueKey<MlbTeamRecord> MLB_TEAM_PKEY = Internal.createUniqueKey(MlbTeam.MLB_TEAM, "mlb_team_pkey", MlbTeam.MLB_TEAM.ID);
+        public static final UniqueKey<MlbTeamRecord> MLB_TEAM_PK = Internal.createUniqueKey(MlbTeam.MLB_TEAM, "mlb_team_pk", MlbTeam.MLB_TEAM.ID);
     }
 }

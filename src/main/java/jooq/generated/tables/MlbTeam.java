@@ -16,10 +16,11 @@ import jooq.generated.tables.records.MlbTeamRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row10;
+import org.jooq.Row11;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -41,7 +42,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MlbTeam extends TableImpl<MlbTeamRecord> {
 
-    private static final long serialVersionUID = -1708224810;
+    private static final long serialVersionUID = -443672408;
 
     /**
      * The reference instance of <code>public.mlb_team</code>
@@ -59,32 +60,32 @@ public class MlbTeam extends TableImpl<MlbTeamRecord> {
     /**
      * The column <code>public.mlb_team.id</code>.
      */
-    public final TableField<MlbTeamRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<MlbTeamRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('mlb_team_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>public.mlb_team.name</code>.
      */
-    public final TableField<MlbTeamRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<MlbTeamRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>public.mlb_team.code</code>.
      */
-    public final TableField<MlbTeamRecord, String> CODE = createField(DSL.name("code"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<MlbTeamRecord, String> CODE = createField(DSL.name("code"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>public.mlb_team.division</code>.
      */
-    public final TableField<MlbTeamRecord, String> DIVISION = createField(DSL.name("division"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<MlbTeamRecord, String> DIVISION = createField(DSL.name("division"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>public.mlb_team.league</code>.
      */
-    public final TableField<MlbTeamRecord, String> LEAGUE = createField(DSL.name("league"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<MlbTeamRecord, String> LEAGUE = createField(DSL.name("league"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>public.mlb_team.level</code>.
      */
-    public final TableField<MlbTeamRecord, String> LEVEL = createField(DSL.name("level"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<MlbTeamRecord, String> LEVEL = createField(DSL.name("level"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>public.mlb_team.first_year_of_play</code>.
@@ -100,6 +101,11 @@ public class MlbTeam extends TableImpl<MlbTeamRecord> {
      * The column <code>public.mlb_team.league_id</code>.
      */
     public final TableField<MlbTeamRecord, Integer> LEAGUE_ID = createField(DSL.name("league_id"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>public.mlb_team.sport_id</code>.
+     */
+    public final TableField<MlbTeamRecord, Integer> SPORT_ID = createField(DSL.name("sport_id"), org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>public.mlb_team.team_id</code>.
@@ -146,17 +152,22 @@ public class MlbTeam extends TableImpl<MlbTeamRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.MLB_TEAM_PKEY);
+        return Arrays.<Index>asList(Indexes.MLB_TEAM_PK);
+    }
+
+    @Override
+    public Identity<MlbTeamRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_MLB_TEAM;
     }
 
     @Override
     public UniqueKey<MlbTeamRecord> getPrimaryKey() {
-        return Keys.MLB_TEAM_PKEY;
+        return Keys.MLB_TEAM_PK;
     }
 
     @Override
     public List<UniqueKey<MlbTeamRecord>> getKeys() {
-        return Arrays.<UniqueKey<MlbTeamRecord>>asList(Keys.MLB_TEAM_PKEY);
+        return Arrays.<UniqueKey<MlbTeamRecord>>asList(Keys.MLB_TEAM_PK);
     }
 
     @Override
@@ -186,11 +197,11 @@ public class MlbTeam extends TableImpl<MlbTeamRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row10 type methods
+    // Row11 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Integer, String, String, String, String, String, Integer, Integer, Integer, Integer> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row11<Integer, String, String, String, String, String, Integer, Integer, Integer, Integer, Integer> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 }

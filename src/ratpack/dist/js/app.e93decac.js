@@ -15,4 +15,4 @@
 
  */
 i["default"].use(Is),new i["default"]({router:ws,render:function(t){return t(p)}}).$mount("#app")},"5c0b":function(t,a,s){"use strict";s("b19e")},"6a07":function(t,a,s){t.exports=s.p+"img/background.b37d0f28.jpg"},"8e1c":function(t,a,s){t.exports=s.p+"img/face-0.83f3f36d.jpg"},"8e52":function(t,a,s){t.exports=s.p+"img/face-1.99e58416.jpg"},b19e:function(t,a,s){},d9fe:function(t,a,s){t.exports=s.p+"img/face-2.119d7ee6.jpg"},de64:function(t,a,s){},e454:function(t,a,s){},fdbc:function(t,a,s){t.exports=s.p+"img/vue-logo.c2a605fb.png"}});
-//# sourceMappingURL=app.26558719.js.map
+//# sourceMappingURL=app.e93decac.js.map
