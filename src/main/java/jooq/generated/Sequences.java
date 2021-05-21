@@ -24,6 +24,11 @@ import org.jooq.impl.SequenceImpl;
 public class Sequences {
 
     /**
+     * The sequence <code>public.mlb_player_id_seq</code>
+     */
+    public static final Sequence<Integer> MLB_PLAYER_ID_SEQ = new SequenceImpl<Integer>("mlb_player_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false));
+
+    /**
      * The sequence <code>public.mlb_team_id_seq</code>
      */
     public static final Sequence<Integer> MLB_TEAM_ID_SEQ = new SequenceImpl<Integer>("mlb_team_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false));

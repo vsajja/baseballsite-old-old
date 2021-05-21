@@ -6,7 +6,9 @@ package jooq.generated;
 
 import javax.annotation.Generated;
 
+import jooq.generated.tables.MlbPlayer;
 import jooq.generated.tables.MlbTeam;
+import jooq.generated.tables.records.MlbPlayerRecord;
 import jooq.generated.tables.records.MlbTeamRecord;
 
 import org.jooq.Identity;
@@ -32,13 +34,17 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
+    public static final Identity<MlbPlayerRecord, Integer> IDENTITY_MLB_PLAYER = Identities0.IDENTITY_MLB_PLAYER;
     public static final Identity<MlbTeamRecord, Integer> IDENTITY_MLB_TEAM = Identities0.IDENTITY_MLB_TEAM;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<MlbPlayerRecord> MLB_PLAYER_PK = UniqueKeys0.MLB_PLAYER_PK;
+    public static final UniqueKey<MlbPlayerRecord> MLB_PLAYER_UN = UniqueKeys0.MLB_PLAYER_UN;
     public static final UniqueKey<MlbTeamRecord> MLB_TEAM_PK = UniqueKeys0.MLB_TEAM_PK;
+    public static final UniqueKey<MlbTeamRecord> MLB_TEAM_UN = UniqueKeys0.MLB_TEAM_UN;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -50,10 +56,14 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     private static class Identities0 {
+        public static Identity<MlbPlayerRecord, Integer> IDENTITY_MLB_PLAYER = Internal.createIdentity(MlbPlayer.MLB_PLAYER, MlbPlayer.MLB_PLAYER.ID);
         public static Identity<MlbTeamRecord, Integer> IDENTITY_MLB_TEAM = Internal.createIdentity(MlbTeam.MLB_TEAM, MlbTeam.MLB_TEAM.ID);
     }
 
     private static class UniqueKeys0 {
+        public static final UniqueKey<MlbPlayerRecord> MLB_PLAYER_PK = Internal.createUniqueKey(MlbPlayer.MLB_PLAYER, "mlb_player_pk", MlbPlayer.MLB_PLAYER.ID);
+        public static final UniqueKey<MlbPlayerRecord> MLB_PLAYER_UN = Internal.createUniqueKey(MlbPlayer.MLB_PLAYER, "mlb_player_un", MlbPlayer.MLB_PLAYER.MLB_PLAYER_ID);
         public static final UniqueKey<MlbTeamRecord> MLB_TEAM_PK = Internal.createUniqueKey(MlbTeam.MLB_TEAM, "mlb_team_pk", MlbTeam.MLB_TEAM.ID);
+        public static final UniqueKey<MlbTeamRecord> MLB_TEAM_UN = Internal.createUniqueKey(MlbTeam.MLB_TEAM, "mlb_team_un", MlbTeam.MLB_TEAM.TEAM_ID);
     }
 }

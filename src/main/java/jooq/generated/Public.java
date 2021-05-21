@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import jooq.generated.tables.MlbPlayer;
 import jooq.generated.tables.MlbTeam;
 
 import org.jooq.Catalog;
@@ -31,12 +32,17 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 229105136;
+    private static final long serialVersionUID = 1569967487;
 
     /**
      * The reference instance of <code>public</code>
      */
     public static final Public PUBLIC = new Public();
+
+    /**
+     * The table <code>public.mlb_player</code>.
+     */
+    public final MlbPlayer MLB_PLAYER = jooq.generated.tables.MlbPlayer.MLB_PLAYER;
 
     /**
      * The table <code>public.mlb_team</code>.
@@ -65,6 +71,7 @@ public class Public extends SchemaImpl {
 
     private final List<Sequence<?>> getSequences0() {
         return Arrays.<Sequence<?>>asList(
+            Sequences.MLB_PLAYER_ID_SEQ,
             Sequences.MLB_TEAM_ID_SEQ);
     }
 
@@ -77,6 +84,7 @@ public class Public extends SchemaImpl {
 
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
+            MlbPlayer.MLB_PLAYER,
             MlbTeam.MLB_TEAM);
     }
 }

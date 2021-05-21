@@ -207,4 +207,11 @@ public class MlbTeamDao extends DAOImpl<MlbTeamRecord, jooq.generated.tables.poj
     public List<jooq.generated.tables.pojos.MlbTeam> fetchByTeamId(Integer... values) {
         return fetch(MlbTeam.MLB_TEAM.TEAM_ID, values);
     }
+
+    /**
+     * Fetch a unique record that has <code>team_id = value</code>
+     */
+    public jooq.generated.tables.pojos.MlbTeam fetchOneByTeamId(Integer value) {
+        return fetchOne(MlbTeam.MLB_TEAM.TEAM_ID, value);
+    }
 }

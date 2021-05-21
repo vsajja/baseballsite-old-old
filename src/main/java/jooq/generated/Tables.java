@@ -6,6 +6,7 @@ package jooq.generated;
 
 import javax.annotation.Generated;
 
+import jooq.generated.tables.MlbPlayer;
 import jooq.generated.tables.MlbTeam;
 
 
@@ -21,6 +22,11 @@ import jooq.generated.tables.MlbTeam;
 )
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>public.mlb_player</code>.
+     */
+    public static final MlbPlayer MLB_PLAYER = MlbPlayer.MLB_PLAYER;
 
     /**
      * The table <code>public.mlb_team</code>.

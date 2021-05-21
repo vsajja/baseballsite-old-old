@@ -6,6 +6,7 @@ package jooq.generated;
 
 import javax.annotation.Generated;
 
+import jooq.generated.tables.MlbPlayer;
 import jooq.generated.tables.MlbTeam;
 
 import org.jooq.Index;
@@ -30,13 +31,19 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
+    public static final Index MLB_PLAYER_PK = Indexes0.MLB_PLAYER_PK;
+    public static final Index MLB_PLAYER_UN = Indexes0.MLB_PLAYER_UN;
     public static final Index MLB_TEAM_PK = Indexes0.MLB_TEAM_PK;
+    public static final Index MLB_TEAM_UN = Indexes0.MLB_TEAM_UN;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
     // -------------------------------------------------------------------------
 
     private static class Indexes0 {
+        public static Index MLB_PLAYER_PK = Internal.createIndex("mlb_player_pk", MlbPlayer.MLB_PLAYER, new OrderField[] { MlbPlayer.MLB_PLAYER.ID }, true);
+        public static Index MLB_PLAYER_UN = Internal.createIndex("mlb_player_un", MlbPlayer.MLB_PLAYER, new OrderField[] { MlbPlayer.MLB_PLAYER.MLB_PLAYER_ID }, true);
         public static Index MLB_TEAM_PK = Internal.createIndex("mlb_team_pk", MlbTeam.MLB_TEAM, new OrderField[] { MlbTeam.MLB_TEAM.ID }, true);
+        public static Index MLB_TEAM_UN = Internal.createIndex("mlb_team_un", MlbTeam.MLB_TEAM, new OrderField[] { MlbTeam.MLB_TEAM.TEAM_ID }, true);
     }
 }

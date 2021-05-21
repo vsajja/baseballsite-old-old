@@ -42,7 +42,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MlbTeam extends TableImpl<MlbTeamRecord> {
 
-    private static final long serialVersionUID = -443672408;
+    private static final long serialVersionUID = -1584266552;
 
     /**
      * The reference instance of <code>public.mlb_team</code>
@@ -152,7 +152,7 @@ public class MlbTeam extends TableImpl<MlbTeamRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.MLB_TEAM_PK);
+        return Arrays.<Index>asList(Indexes.MLB_TEAM_PK, Indexes.MLB_TEAM_UN);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class MlbTeam extends TableImpl<MlbTeamRecord> {
 
     @Override
     public List<UniqueKey<MlbTeamRecord>> getKeys() {
-        return Arrays.<UniqueKey<MlbTeamRecord>>asList(Keys.MLB_TEAM_PK);
+        return Arrays.<UniqueKey<MlbTeamRecord>>asList(Keys.MLB_TEAM_PK, Keys.MLB_TEAM_UN);
     }
 
     @Override

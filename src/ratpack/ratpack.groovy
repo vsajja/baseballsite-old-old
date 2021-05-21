@@ -1,4 +1,5 @@
 import com.zaxxer.hikari.HikariConfig
+import jooq.generated.tables.pojos.MlbPlayer
 import org.baseballsite.services.BaseballService
 import org.baseballsite.services.MlbStatsAPIService
 import org.slf4j.Logger
@@ -54,8 +55,21 @@ ratpack {
         get('update/mlb/teams') {
             def mlbTeams = mlbStatsAPIService.getMlbTeams()
 
-            mlbTeams.each {team ->
+            mlbTeams.each { team ->
                 baseballService.insertMlbTeam(team)
+            }
+
+            render 'finished'
+        }
+
+        get('update/mlb/roster') {
+            def mlbTeams = mlbStatsAPIService.getMlbTeams()
+
+            mlbTeams.each {team ->
+                List<MlbPlayer> roster = mlbStatsAPIService.getRoster(team.getTeamId())
+                roster.each { MlbPlayer mlbPlayer ->
+                    baseballService.insertMlbPlayer(mlbPlayer)
+                }
             }
 
             render 'finished'

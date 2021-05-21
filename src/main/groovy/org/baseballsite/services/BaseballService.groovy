@@ -2,7 +2,9 @@ package org.baseballsite.services
 
 import com.google.inject.Inject
 import groovy.json.JsonSlurper
+import jooq.generated.tables.daos.MlbPlayerDao
 import jooq.generated.tables.daos.MlbTeamDao
+import jooq.generated.tables.pojos.MlbPlayer
 import jooq.generated.tables.pojos.MlbTeam
 
 import javax.sql.DataSource
@@ -22,6 +24,7 @@ class BaseballService {
     DSLContext database
 
     MlbTeamDao mlbTeamDao
+    MlbPlayerDao mlbPlayerDao
 
     @Inject
     BaseballService(DataSource dataSource) {
@@ -30,6 +33,7 @@ class BaseballService {
                 .set(SQLDialect.POSTGRES)
         )
         mlbTeamDao = new MlbTeamDao(database.configuration())
+        mlbPlayerDao = new MlbPlayerDao(database.configuration())
     }
 
     def insertMlbTeam(MlbTeam mlbTeam) {
@@ -44,6 +48,21 @@ class BaseballService {
             println "Updating: ${mlbTeam.toString()}"
             mlbTeam.setId(team.getId())
             mlbTeamDao.update(mlbTeam)
+        }
+    }
+
+    def insertMlbPlayer(MlbPlayer mlbPlayer) {
+        MlbPlayer player = mlbPlayerDao.fetchOne(MLB_PLAYER.MLB_PLAYER_ID, mlbPlayer.getMlbPlayerId())
+
+        // insert
+        if (player == null) {
+            println "Inserting: ${mlbPlayer.toString()}"
+            mlbPlayerDao.insert(mlbPlayer)
+        } else {
+            // update
+            println "Updating: ${mlbPlayer.toString()}"
+            mlbPlayer.setId(player.getId())
+            mlbPlayerDao.update(mlbPlayer)
         }
     }
 }

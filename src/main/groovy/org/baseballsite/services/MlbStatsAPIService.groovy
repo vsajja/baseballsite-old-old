@@ -1,9 +1,13 @@
 package org.baseballsite.services
 
 import groovy.json.JsonSlurper
+import jooq.generated.tables.pojos.MlbPlayer
 import jooq.generated.tables.pojos.MlbTeam
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 
 class MlbStatsAPIService {
     final Logger log = LoggerFactory.getLogger(this.class)
@@ -65,5 +69,66 @@ class MlbStatsAPIService {
         assert mlbTeams.size() == 30
 
         return mlbTeams
+    }
+
+    List<MlbPlayer> getRoster(Integer mlbTeamId) {
+        def jsonStr = "$MLB_STATS_API_BASE_URL/teams/${mlbTeamId}/roster?rosterType=40Man".toURL().text
+        def jsonObj = new JsonSlurper().parseText(jsonStr)
+        def players = jsonObj.roster
+
+        def roster = []
+
+        roster.addAll(players.collect { player ->
+            Integer mlbPlayerId = player['person']['id']
+            Integer jerseyNumber = player['jerseyNumber'] != '' ? Integer.parseInt(player['jerseyNumber']) : null
+            String playerLink = player['person']['link']
+
+            // use the playerLink to get more player details
+            def playerInfo = new JsonSlurper().parseText(
+                    "https://statsapi.mlb.com/${playerLink}".toURL().text
+            )
+
+            String nameFirst = playerInfo['people']['useName'][0]
+            String nameLast = playerInfo['people']['lastName'][0]
+            Timestamp birthDate = new SimpleDateFormat('YYYY-MM-DD').parse(
+                    playerInfo['people']['birthDate'][0]
+            ).toTimestamp()
+            Integer age = playerInfo['people']['currentAge'][0]
+
+            String birthCity = playerInfo['people']['birthCity'][0]
+            String birthCountry = playerInfo['people']['birthCountry'][0]
+            Integer heightFt = Integer.parseInt((playerInfo['people']['height'][0].split(' ')[0] - "'").trim())
+            Integer heightInches = Integer.parseInt(playerInfo['people']['height'][0].split(' ')[1] - "\"".trim())
+            Integer weight = playerInfo['people']['weight'][0]
+            String position = playerInfo['people']['primaryPosition']['abbreviation'][0]
+            Timestamp mlbDebutDate = playerInfo['people']['mlbDebutDate'][0] != null ? new SimpleDateFormat('YYYY-MM-DD').parse(
+                    playerInfo['people']['mlbDebutDate'][0]
+            ).toTimestamp() : null
+
+            String pitchHand = playerInfo['people']['pitchHand']['code'][0]
+            String bats = playerInfo['people']['batSide']['code'][0]
+
+            MlbPlayer mlbPlayer = new MlbPlayer()
+            mlbPlayer.setNameFirst(nameFirst)
+            mlbPlayer.setNameLast(nameLast)
+            mlbPlayer.setMlbTeamId(mlbTeamId)
+            mlbPlayer.setMlbPlayerId(mlbPlayerId)
+            mlbPlayer.setBirthCity(birthCity)
+            mlbPlayer.setBirthDate(birthDate)
+            mlbPlayer.setBirthCountry(birthCountry)
+            mlbPlayer.setAge(age)
+            mlbPlayer.setJerseyNumber(jerseyNumber)
+            mlbPlayer.setPosition(position)
+            mlbPlayer.setHeightFt(heightFt)
+            mlbPlayer.setHeightInches(heightInches)
+            mlbPlayer.setMlbDebutDate(mlbDebutDate)
+            mlbPlayer.setThrows(pitchHand)
+            mlbPlayer.setBats(bats)
+            mlbPlayer.setWeight(weight)
+
+            return mlbPlayer
+        })
+
+        return roster
     }
 }
