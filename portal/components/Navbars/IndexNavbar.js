@@ -45,28 +45,6 @@ export default function Navbar(props) {
                   </a>
                 </li> */}
             </ul>
-            <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
-              <li className="flex items-center">
-                <a
-                  className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  href="/"
-                >
-                  <i className="text-white fas fa-shopping-bag text-lg leading-lg mr-2" />{" "}
-                  <span className="text-white">SHOP</span>
-                </a>
-              </li>
-              <li className="flex items-center">
-                <a
-                  className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  href="https://twitter.com/vsajja"
-                  target="_blank"
-                >
-                  <span className="lg:hidden inline-block ml-2">Tweet</span>
-                  <i className="text-white fab fa-twitter text-lg leading-lg mr-2" />{" "}
-                  {/* <span className="text-white">TWITTER</span> */}
-                </a>
-              </li>
-            </ul>
           </div>
         </div>
       </nav>
