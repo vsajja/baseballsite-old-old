@@ -8,16 +8,15 @@ export default function Navbar(props) {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
   return (
     <>
-      <nav className="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-1 navbar-expand-lg bg-white shadow">
+      <nav className="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-1 navbar-expand-lg bg-black hadow">
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
-        <i class="fas fa-baseball-ball fa-2x"></i> &nbsp;&nbsp;&nbsp;&nbsp;
           <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
             <Link href="/">
               <a
                 className="text-blueGray-700 text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase"
                 href="#pablo"
               >
-                Vinny's Fantasy Baseball
+                <i className="fas fa-2x fa-baseball-ball text-white"></i>
               </a>
             </Link>
             <button
@@ -52,8 +51,8 @@ export default function Navbar(props) {
                   className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
                   href="/"
                 >
-                  <i className="text-blueGray-400 fas fa-shopping-bag text-lg leading-lg mr-2" />{" "}
-                  SHOP
+                  <i className="text-white fas fa-shopping-bag text-lg leading-lg mr-2" />{" "}
+                  <span className="text-white">SHOP</span>
                 </a>
               </li>
               <li className="flex items-center">
@@ -62,8 +61,9 @@ export default function Navbar(props) {
                   href="https://twitter.com/vsajja"
                   target="_blank"
                 >
-                  <i className="text-blueGray-400 fab fa-twitter text-lg leading-lg " />
                   <span className="lg:hidden inline-block ml-2">Tweet</span>
+                  <i className="text-white fab fa-twitter text-lg leading-lg mr-2" />{" "}
+                  {/* <span className="text-white">TWITTER</span> */}
                 </a>
               </li>
             </ul>

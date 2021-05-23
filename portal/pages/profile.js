@@ -3,22 +3,23 @@ import React from "react";
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import Footer from "components/Footers/Footer.js";
 
+import CardLineChart from "components/Cards/CardLineChart.js";
+import CardBarChart from "components/Cards/CardBarChart.js";
+import CardPageVisits from "components/Cards/CardPageVisits.js";
+import CardSocialTraffic from "components/Cards/CardSocialTraffic.js";
+
 export default function Profile() {
   return (
     <>
       <IndexNavbar fixed />
 
       <main className="profile-page">
-
-
-        <section className="relative block h-500-px">
-          
-
+        <section className="relative block h-350-px">
           <div
             className="absolute top-0 w-full h-full bg-center bg-cover"
             style={{
               backgroundImage:
-                "url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2710&q=80')",
+                "url('')",
             }}
           >
             <span
@@ -47,17 +48,13 @@ export default function Profile() {
           </div>
         </section>
         <section className="relative py-16 bg-blueGray-200">
+          
           <div className="container mx-auto px-4">
             <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
               <div className="px-6">
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative">
-                      <img
-                        alt="..."
-                        src="/img/team-2-800x800.jpg"
-                        className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
-                      />
                     </div>
                   </div>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
@@ -70,6 +67,7 @@ export default function Profile() {
                       </button>
                     </div>
                   </div>
+
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
                     <div className="flex justify-center py-4 lg:pt-4 pt-8">
                       <div className="mr-4 p-3 text-center">
@@ -135,6 +133,13 @@ export default function Profile() {
                       </a>
                     </div>
                   </div>
+                </div>
+
+                  <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
+                  <CardPageVisits />
+                </div>
+                <div className="w-full xl:w-4/12 px-4">
+                  <CardSocialTraffic />
                 </div>
               </div>
             </div>
