@@ -8,8 +8,9 @@ export default function Navbar(props) {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
   return (
     <>
-      <nav className="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg bg-white shadow">
+      <nav className="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-1 navbar-expand-lg bg-white shadow">
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+        <i class="fas fa-baseball-ball fa-2x"></i> &nbsp;&nbsp;&nbsp;&nbsp;
           <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
             <Link href="/">
               <a
@@ -41,7 +42,7 @@ export default function Navbar(props) {
                     href="/"
                   >
                     <i className="text-blueGray-400 fas fa-baby text-lg leading-lg mr-2" />{" "}
-                    NavItem
+                    Players
                   </a>
                 </li> */}
             </ul>
