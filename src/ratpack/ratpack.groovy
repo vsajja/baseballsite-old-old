@@ -1,4 +1,5 @@
 import com.zaxxer.hikari.HikariConfig
+import groovy.json.JsonBuilder
 import jooq.generated.tables.pojos.MlbPlayer
 import org.baseballsite.services.BaseballService
 import org.baseballsite.services.MlbStatsAPIService
@@ -65,7 +66,7 @@ ratpack {
         get('update/mlb/roster') {
             def mlbTeams = mlbStatsAPIService.getMlbTeams()
 
-            mlbTeams.each {team ->
+            mlbTeams.each { team ->
                 List<MlbPlayer> roster = mlbStatsAPIService.getRoster(team.getTeamId())
                 roster.each { MlbPlayer mlbPlayer ->
                     baseballService.insertMlbPlayer(mlbPlayer)
@@ -80,8 +81,48 @@ ratpack {
 
             def result = new JsonSlurper().parseText(jsonStr)
 
+            def leagueLeaders = result['stats'][0]['splits'].collect {
+                def playerName = it['player']['fullName']
+                def mlbPlayerId = it['player']['id']
+                def position = it['position']['abbreviation']
 
-            render result['stats'].toString()
+                def rank = it['rank']
+
+                def gamesPlayed = it['stat']['gamesPlayed']
+                def hits = it['stat']['hits']
+                def atBats = it['stat']['atBats'].toString()
+                def runs = it['stat']['runs']
+                def homeRuns = it['stat']['homeRuns']
+                def rbi = it['stat']['rbi']
+                def stolenBases = it['stat']['stolenBases']
+                def avg = it['stat']['avg']
+                def obp = it['stat']['obp']
+                def slug = it['stat']['slg']
+                def ops = it['stat']['ops']
+
+                println "$rank $playerName"
+                println "${gamesPlayed}G ${hits}/${atBats}AB ${runs}R ${homeRuns}HR ${rbi}RBI ${stolenBases}SB ${avg}AVG ${obp} OBP ${slug} SLG ${ops} OPS"
+
+                return [
+                        'playerName' : playerName,
+                        'mlbPlayerId': mlbPlayerId,
+                        'position'   : position,
+                        'rank'       : rank,
+                        'gamesPlayed': gamesPlayed,
+                        'hits'       : hits,
+                        'atBats'     : atBats,
+                        'runs'       : runs,
+                        'homeRuns'   : homeRuns,
+                        'rbi'        : rbi,
+                        'stolenBases': stolenBases,
+                        'avg'        : avg,
+                        'obp'        : obp,
+                        'slug'       : slug,
+                        'ops'        : ops
+                ]
+            }
+
+            render new JsonBuilder(leagueLeaders).toPrettyString()
         }
 
         files {

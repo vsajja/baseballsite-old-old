@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-target-blank */
-import React from "react";
 import Link from "next/link";
 
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
@@ -17,269 +16,187 @@ import CardSettings from "components/Cards/CardSettings.js";
 import namor from 'namor'
 
 import styled from 'styled-components'
-import { useTable, useGroupBy, useExpanded } from 'react-table'
+import { useTable, useGroupBy, useExpanded, useFilters, useSortBy } from 'react-table'
 
-const range = len => {
-  const arr = []
-  for (let i = 0; i < len; i++) {
-    arr.push(i)
-  }
-  return arr
-}
+import React, { useMemo, useState, useEffect } from "react";
+import axios from "axios";
 
-const newPerson = () => {
-  const statusChance = Math.random()
-  return {
-    firstName: namor.generate({ words: 1, numbers: 0 }),
-    lastName: namor.generate({ words: 1, numbers: 0 }),
-    age: Math.floor(Math.random() * 30),
-    visits: Math.floor(Math.random() * 100),
-    progress: Math.floor(Math.random() * 100),
-    status:
-      statusChance > 0.66
-        ? 'relationship'
-        : statusChance > 0.33
-        ? 'complicated'
-        : 'single',
-  }
-}
-
-export function makeData(...lens) {
-  const makeDataLevel = (depth = 0) => {
-    const len = lens[depth]
-    return range(len).map(d => {
-      return {
-        ...newPerson(),
-        subRows: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined,
-      }
-    })
-  }
-
-  return makeDataLevel()
-}
-
-const Styles = styled.div`
-  padding: 1rem;
-
-  table {
-    border-spacing: 0;
-    border: 1px solid black;
-
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`
-
-function Table({ columns, data }) {
+export function Table({ columns, data }) {
+  const [filterInput, setFilterInput] = useState("");
+  // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-    state: { groupBy, expanded },
+    setFilter
   } = useTable(
     {
       columns,
-      data,
+      data
     },
-    useGroupBy,
-    useExpanded // useGroupBy would be pretty useless without useExpanded ;)
-  )
+    useFilters,
+    useSortBy
+  );
 
-  // We don't want to render all of the rows for this example, so cap
-  // it at 100 for this use case
-  const firstPageRows = rows.slice(0, 100)
+  const handleFilterChange = e => {
+    const value = e.target.value || undefined;
+    setFilter("show.name", value);
+    setFilterInput(value);
+  };
 
+  // Render the UI for your table
   return (
     <>
-      <pre>
-        <code>{JSON.stringify({ groupBy, expanded }, null, 2)}</code>
-      </pre>
-      <Legend />
-      <table {...getTableProps()}>
+      {/* <input
+        value={filterInput}
+        onChange={handleFilterChange}
+        placeholder={"Search player"}
+      /> */}
+      <table className="border" {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr className="border bg-black text-white" {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>
-                  {column.canGroupBy ? (
-                    // If the column can be grouped, let's add a toggle
-                    <span {...column.getGroupByToggleProps()}>
-                      {column.isGrouped ? '🛑 ' : '👊 '}
-                    </span>
-                  ) : null}
-                  {column.render('Header')}
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className={
+                    column.isSorted
+                      ? column.isSortedDesc
+                        ? "sort-desc"
+                        : "sort-asc"
+                      : ""
+                  }
+                >
+                  {column.render("Header")}
                 </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {firstPageRows.map((row, i) => {
-            prepareRow(row)
+          {rows.map((row, i) => {
+            prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map(cell => {
                   return (
-                    <td
-                      // For educational purposes, let's color the
-                      // cell depending on what type it is given
-                      // from the useGroupBy hook
-                      {...cell.getCellProps()}
-                      style={{
-                        background: cell.isGrouped
-                          ? '#0aff0082'
-                          : cell.isAggregated
-                          ? '#ffa50078'
-                          : cell.isPlaceholder
-                          ? '#ff000042'
-                          : 'white',
-                      }}
-                    >
-                      {cell.isGrouped ? (
-                        // If it's a grouped cell, add an expander and row count
-                        <>
-                          <span {...row.getToggleRowExpandedProps()}>
-                            {row.isExpanded ? '👇' : '👉'}
-                          </span>{' '}
-                          {cell.render('Cell')} ({row.subRows.length})
-                        </>
-                      ) : cell.isAggregated ? (
-                        // If the cell is aggregated, use the Aggregated
-                        // renderer for cell
-                        cell.render('Aggregated')
-                      ) : cell.isPlaceholder ? null : ( // For cells with repeated values, render null
-                        // Otherwise, just render the regular cell
-                        cell.render('Cell')
-                      )}
-                    </td>
-                  )
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  );
                 })}
               </tr>
-            )
+            );
           })}
         </tbody>
       </table>
-      <br />
-      <div>Showing the first 100 results of {rows.length} rows</div>
     </>
-  )
+  );
 }
 
-function Legend() {
-  return (
-    <div
-      style={{
-        padding: '0.5rem 0',
-      }}
-    >
-      <span
-        style={{
-          display: 'inline-block',
-          background: '#0aff0082',
-          padding: '0.5rem',
-        }}
-      >
-        Grouped
-      </span>{' '}
-      <span
-        style={{
-          display: 'inline-block',
-          background: '#ffa50078',
-          padding: '0.5rem',
-        }}
-      >
-        Aggregated
-      </span>{' '}
-      <span
-        style={{
-          display: 'inline-block',
-          background: '#ff000042',
-          padding: '0.5rem',
-        }}
-      >
-        Repeated Value
-      </span>
-    </div>
-  )
-}
 
-// This is a custom aggregator that
-// takes in an array of leaf values and
-// returns the rounded median
-function roundedMedian(leafValues) {
-  let min = leafValues[0] || 0
-  let max = leafValues[0] || 0
+// "player": {
+//   "playerName": "Nick Castellanos",
+//   "mlbPlayerId": 592206,
+//   "position": "RF",
+//   "rank": 1,
+//   "gamesPlayed": 41,
+//   "hits": 58,
+//   "atBats": "163",
+//   "runs": 33,
+//   "homeRuns": 12,
+//   "rbi": 30,
+//   "stolenBases": 1,
+//   "avg": ".356",
+//   "obp": ".417",
+//   "slug": ".669",
+//   "ops": "1.085"
+// }
 
-  leafValues.forEach(value => {
-    min = Math.min(min, value)
-    max = Math.max(max, value)
-  })
 
-  return Math.round((min + max) / 2)
-}
-
+// 43G 39/135AB 24R 5HR 12RBI 2SB .289AVG .358 OBP .489 SLG .846 OPS
 
 export default function Index() {
-  const columns = React.useMemo(
+  const hittingCols = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: "Hitting Leaders",
         columns: [
+          // {
+          //   Header: "",
+          //   accessor: "mlbPlayerId"
+          // },
           {
-            Header: 'First Name',
-            accessor: 'firstName',
+            Header: "Rank",
+            accessor: "rank",
+            style: {
+              fontWeight: 'bolder'
+            },
           },
           {
-            Header: 'Last Name',
-            accessor: 'lastName',
+            Header: "Name",
+            accessor: "playerName"
           },
-        ],
+          {
+            Header: "Position",
+            accessor: "position"
+          }
+        ]
       },
       {
-        Header: 'Info',
+        Header: "Stats",
         columns: [
           {
-            Header: 'Age',
-            accessor: 'age',
+            Header: "Games",
+            accessor: "gamesPlayed"
+          },
+          // {
+          //   Header: "AB",
+          //   accessor: "atBats"
+          // },
+          {
+            Header: "R",
+            accessor: "runs"
           },
           {
-            Header: 'Visits',
-            accessor: 'visits',
+            Header: "HR",
+            accessor: "homeRuns"
           },
           {
-            Header: 'Status',
-            accessor: 'status',
+            Header: "RBI",
+            accessor: "rbi"
           },
           {
-            Header: 'Profile Progress',
-            accessor: 'progress',
+            Header: "SB",
+            accessor: "stolenBases"
           },
-        ],
-      },
+          {
+            Header: "AVG",
+            accessor: "avg"
+          },
+          {
+            Header: "OBP",
+            accessor: "obp"
+          },
+          {
+            Header: "OPS",
+            accessor: "ops",
+          }
+        ]
+      }
     ],
     []
-  )
+  );
 
-  const data = React.useMemo(() => makeData(20), [])
+  const [hittingData, setData] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const result = await axios("https://baseballsite.herokuapp.com/leaders");
+      // const result = await axios("http://localhost:5051/leaders");
+      setData(result.data);
+    })();
+  }, []);
 
   return (
     <>
@@ -292,67 +209,13 @@ export default function Index() {
       <div className="container px-4 py-36 mx-auto">
         <div className="flex flex-wrap">
           <div className="w-full px-4 flex-1">
-            <CardStats 
-            statSubtitle="Runs" 
-            statTitle="J.D. Martinez"
-            statPercent="38 R"
-            />
-
-            <CardStats 
+            {/* <CardStats 
             statSubtitle="Home Runs" 
             statTitle="Ronald Acuña Jr."
             statPercent="15 HR"
-            />
-
-            <CardStats 
-            statSubtitle="Runs Batted In" 
-            statTitle="Trey Mancini"
-            statPercent="39 RBI"
-            />
-            <CardStats 
-            statSubtitle="Batting Average" 
-            statTitle="Yermin Mercedes"
-            statPercent="0.354 AVG"
-            />
-                        <CardStats 
-            statSubtitle="Stolen Bases" 
-            statTitle="Whit Merrifield"
-            statPercent="13 SB"
-            />
+            /> */}
+            <Table columns={hittingCols} data={hittingData} />
           </div>
-          
-          <div className="w-full px-4 flex-1">
-            <CardStats 
-            statSubtitle="Wins" 
-            statTitle="Jack Flaherty"
-            statPercent="8 W"
-            />
-
-            <CardStats 
-            statSubtitle="Saves" 
-            statTitle="Mark Melancon"
-            statPercent="15 SV"
-            />
-
-            <CardStats 
-            statSubtitle="Strike Outs" 
-            statTitle="Shane Bieber"
-            statPercent="98 K"
-            />
-
-            <CardStats 
-            statSubtitle="Earned Run Average" 
-            statTitle="Brandon Woodruff"
-            statPercent="1.58 ERA"
-            />
-
-            <CardStats 
-            statSubtitle="WHIP" 
-            statTitle="Brandon Woodruff"
-            statPercent="0.74 WHIP"
-            />
-          </div>
-
         </div>
       </div>
 
