@@ -75,6 +75,15 @@ ratpack {
             render 'finished'
         }
 
+        get('leaders') {
+            String jsonStr = "http://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting".toURL().text
+
+            def result = new JsonSlurper().parseText(jsonStr)
+
+
+            render result['stats'].toString()
+        }
+
         files {
             dir 'dist'
             indexFiles 'index.html'
