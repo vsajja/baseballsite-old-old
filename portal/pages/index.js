@@ -348,7 +348,7 @@ export default function Index() {
 
             <CardStats 
             statSubtitle="WHIP" 
-            statTitle="Whit Merrifield"
+            statTitle="Brandon Woodruff"
             statPercent="0.74 WHIP"
             />
           </div>
