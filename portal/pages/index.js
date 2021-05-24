@@ -21,79 +21,129 @@ import { useTable, useGroupBy, useExpanded, useFilters, useSortBy } from 'react-
 import React, { useMemo, useState, useEffect } from "react";
 import axios from "axios";
 
-export function Table({ columns, data }) {
-  const [filterInput, setFilterInput] = useState("");
-  // Use the state and functions returned from useTable to build your UI
+// Create a default prop getter
+const defaultPropGetter = () => ({})
+
+// Expose some prop getters for headers, rows and cells, or more if you want!
+function Table({
+  columns,
+  data,
+  getHeaderProps = defaultPropGetter,
+  getColumnProps = defaultPropGetter,
+  getRowProps = defaultPropGetter,
+  getCellProps = defaultPropGetter,
+}) {
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-    setFilter
-  } = useTable(
-    {
-      columns,
-      data
-    },
-    useFilters,
-    useSortBy
-  );
+  } = useTable({
+    columns,
+    data,
+  })
 
-  const handleFilterChange = e => {
-    const value = e.target.value || undefined;
-    setFilter("show.name", value);
-    setFilterInput(value);
-  };
+  // // Render the UI for your table
+  // return (
+  //   <>
+  //     {/* <input
+  //       value={filterInput}
+  //       onChange={handleFilterChange}
+  //       placeholder={"Search player"}
+  //     /> */}
+  //     <table className="border" {...getTableProps()}>
+  //       <thead>
+  //         {headerGroups.map(headerGroup => (
+  //           <tr className="border bg-black text-white" {...headerGroup.getHeaderGroupProps()}>
+  //             {headerGroup.headers.map(column => (
+  //               <th
+  //                 {...column.getHeaderProps(column.getSortByToggleProps())}
+  //                 className={
+  //                   column.isSorted
+  //                     ? column.isSortedDesc
+  //                       ? "sort-desc"
+  //                       : "sort-asc"
+  //                     : ""
+  //                 }
+  //               >
+  //                 {column.render("Header")}
+  //               </th>
+  //             ))}
+  //           </tr>
+  //         ))}
+  //       </thead>
+  //       <tbody {...getTableBodyProps()}>
+  //         {rows.map((row, i) => {
+  //           prepareRow(row);
+  //           return (
+  //             <tr {...row.getRowProps()}>
+  //               {row.cells.map(cell => {
+  //                 return (
+  //                   <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+  //                 );
+  //               })}
+  //             </tr>
+  //           );
+  //         })}
+  //       </tbody>
+  //     </table>
+  //   </>
+  // );
 
-  // Render the UI for your table
   return (
-    <>
-      {/* <input
-        value={filterInput}
-        onChange={handleFilterChange}
-        placeholder={"Search player"}
-      /> */}
-      <table className="border" {...getTableProps()}>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr className="border bg-black text-white" {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className={
-                    column.isSorted
-                      ? column.isSortedDesc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : ""
-                  }
-                >
-                  {column.render("Header")}
-                </th>
-              ))}
+    <table {...getTableProps()}>
+      <thead>
+        {headerGroups.map(headerGroup => (
+          <tr className="border bg-black text-white" {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th
+                // Return an array of prop objects and react-table will merge them appropriately
+                {...column.getHeaderProps([
+                  {
+                    className: column.className,
+                    style: column.style,
+                  },
+                  getColumnProps(column),
+                  getHeaderProps(column),
+                ])}
+              >
+                {column.render('Header')}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody {...getTableBodyProps()}>
+        {rows.map((row, i) => {
+          prepareRow(row)
+          return (
+            // Merge user row props in
+            <tr {...row.getRowProps(getRowProps(row))}>
+              {row.cells.map(cell => {
+                return (
+                  <td
+                    // Return an array of prop objects and react-table will merge them appropriately
+                    {...cell.getCellProps([
+                      {
+                        className: cell.column.className,
+                        style: cell.column.style,
+                      },
+                      getColumnProps(cell.column),
+                      getCellProps(cell),
+                    ])}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                )
+              })}
             </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </>
+          )
+        })}
+      </tbody>
+    </table>
   );
 }
-
 
 // "player": {
 //   "playerName": "Nick Castellanos",
@@ -113,7 +163,6 @@ export function Table({ columns, data }) {
 //   "ops": "1.085"
 // }
 
-
 // 43G 39/135AB 24R 5HR 12RBI 2SB .289AVG .358 OBP .489 SLG .846 OPS
 
 export default function Index() {
@@ -131,11 +180,14 @@ export default function Index() {
             accessor: "rank",
             style: {
               fontWeight: 'bolder'
-            },
+            }
           },
           {
             Header: "Name",
-            accessor: "playerName"
+            accessor: "playerName",
+            style: {
+              fontWeight: 'bolder'
+            }
           },
           {
             Header: "Position",
@@ -150,10 +202,10 @@ export default function Index() {
             Header: "Games",
             accessor: "gamesPlayed"
           },
-          // {
-          //   Header: "AB",
-          //   accessor: "atBats"
-          // },
+          {
+            Header: "AB",
+            accessor: "atBats"
+          },
           {
             Header: "R",
             accessor: "runs"
@@ -172,15 +224,30 @@ export default function Index() {
           },
           {
             Header: "AVG",
-            accessor: "avg"
+            accessor: "avg",
+            Cell: avg => (
+              <span className={avg.value > 0.3 ? "bg-red-500 text-white" : ""}>
+                {avg.value}
+              </span>
+            )
           },
           {
             Header: "OBP",
-            accessor: "obp"
+            accessor: "obp",
+            Cell: obp => (
+              <span className={obp.value > 0.4 ? "bg-red-500 text-white" : ""}>
+                {obp.value}
+              </span>
+            )
           },
           {
             Header: "OPS",
             accessor: "ops",
+            Cell: ops => (
+              <span className={ops.value > 0.9 ? "bg-red-500 text-white" : ""}>
+                {ops.value}
+              </span>
+            )
           }
         ]
       }
@@ -214,7 +281,10 @@ export default function Index() {
             statTitle="Ronald Acuña Jr."
             statPercent="15 HR"
             /> */}
-            <Table columns={hittingCols} data={hittingData} />
+            <Table 
+              columns={hittingCols} 
+              data={hittingData} 
+            />
           </div>
         </div>
       </div>

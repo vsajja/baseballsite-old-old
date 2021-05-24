@@ -77,7 +77,7 @@ ratpack {
         }
 
         get('leaders') {
-            String jsonStr = "http://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting".toURL().text
+            String jsonStr = "http://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting,pitching".toURL().text
 
             def result = new JsonSlurper().parseText(jsonStr)
 
