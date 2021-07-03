@@ -1,8 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 // components
 
-export default function CardStandings() {
+export default function CardStandings({
+  league
+}) {
   return (
     <>
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
@@ -10,7 +13,7 @@ export default function CardStandings() {
           <div className="flex flex-wrap items-center">
             <div className="relative w-full px-4 max-w-full flex-grow flex-1">
               <h3 className="font-semibold text-base text-blueGray-700">
-                Social traffic
+                {league}
               </h3>
             </div>
             <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
@@ -150,3 +153,13 @@ export default function CardStandings() {
     </>
   );
 }
+
+
+CardStandings.defaultProps = {
+  league: "Major League Baseball",
+  division: ""
+};
+
+CardStandings.propTypes = {
+  league: PropTypes.string
+};

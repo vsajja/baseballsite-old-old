@@ -53,7 +53,13 @@ ratpack {
             next()
         }
 
-        get('update/mlb/teams') {
+        get('players') {
+            def mlbPlayers = baseballService.getMlbPlayers()
+
+            render new JsonBuilder(mlbPlayers).toPrettyString()
+        }
+
+        get('update/baseballsite/mlb/teams') {
             def mlbTeams = mlbStatsAPIService.getMlbTeams()
 
             mlbTeams.each { team ->
@@ -63,7 +69,7 @@ ratpack {
             render 'finished'
         }
 
-        get('update/mlb/roster') {
+        get('update/baseballsite/mlb/roster') {
             def mlbTeams = mlbStatsAPIService.getMlbTeams()
 
             mlbTeams.each { team ->
@@ -74,6 +80,11 @@ ratpack {
             }
 
             render 'finished'
+        }
+
+        get('mlb/standings') {
+            def standings = mlbStatsAPIService.getMlbStandings()
+            render new JsonBuilder(standings).toPrettyString()
         }
 
         get('leaders') {

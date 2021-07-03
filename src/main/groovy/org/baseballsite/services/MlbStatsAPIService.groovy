@@ -1,5 +1,6 @@
 package org.baseballsite.services
 
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import jooq.generated.tables.pojos.MlbPlayer
 import jooq.generated.tables.pojos.MlbTeam
@@ -63,12 +64,59 @@ class MlbStatsAPIService {
             mlbTeam.setSportId(team['sport']['id'])
             mlbTeam.setTeamId(team['id'])
 
+            getStandings()
+
             return mlbTeam
         }.findAll { it.level == 'Major League Baseball' }
 
         assert mlbTeams.size() == 30
 
         return mlbTeams
+    }
+
+    def getMlbStandings() {
+        def season = 2021
+        String jsonStr = "$MLB_STATS_API_BASE_URL/standings?leagueId=${AL},${NL}&season=${season}".toURL().text
+
+        def standings = new JsonSlurper().parseText(jsonStr)
+
+        def alEastStandings = divisionStandings(standings['records']['teamRecords'][1])
+        def alCentralStandings = divisionStandings(standings['records']['teamRecords'][2])
+        def alWestStandings = divisionStandings(standings['records']['teamRecords'][0])
+
+        def nlEastStandings = divisionStandings(standings['records']['teamRecords'][5])
+        def nlCentralStandings = divisionStandings(standings['records']['teamRecords'][3])
+        def nlWestStandings = divisionStandings(standings['records']['teamRecords'][4])
+
+        return [
+            'AL East' : alEastStandings,
+            'AL Central' : alCentralStandings,
+            'AL West' : alWestStandings,
+
+            'NL East' : nlEastStandings,
+            'NL Central' : nlCentralStandings,
+            'NL West' : nlWestStandings,
+        ]
+    }
+
+    def divisionStandings = {
+        return it.collect {
+            return [
+                'teamId': it['team']['id'],
+                'name': it['team']['name'],
+                'wins': it['leagueRecord']['wins'],
+                'losses': it['leagueRecord']['losses'],
+                'winPct': it['leagueRecord']['pct'],
+                'gamesBack': it['gamesBack'],
+                'wildCardGamesBack': it['wildCardGamesBack'],
+
+                'runsScored': it['runsScored'],
+                'runsAllowed': it['runsAllowed'],
+                'runDifferential': it['runDifferential'],
+
+                'L10': it['streak']['streakCode']
+            ]
+        }
     }
 
     List<MlbPlayer> getRoster(Integer mlbTeamId) {

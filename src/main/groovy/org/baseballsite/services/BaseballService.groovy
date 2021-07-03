@@ -36,6 +36,22 @@ class BaseballService {
         mlbPlayerDao = new MlbPlayerDao(database.configuration())
     }
 
+    List<MlbTeam> getMlbTeams() {
+        def mlbTeams = database.selectFrom(MLB_TEAM)
+            .where(MLB_TEAM.LEVEL.eq('Major League Baseball'))
+            .fetch()
+            .into(MlbTeam.class)
+
+        return mlbTeams
+    }
+
+    List<MlbPlayer> getMlbPlayers() {
+        def mlbPlayers = database.selectFrom(MLB_PLAYER)
+            .fetch()
+            .into(MlbPlayer.class)
+        return mlbPlayers
+    }
+
     def insertMlbTeam(MlbTeam mlbTeam) {
         MlbTeam team = mlbTeamDao.fetchOne(MLB_TEAM.TEAM_ID, mlbTeam.getTeamId())
 
